@@ -1,0 +1,3 @@
+## Web Dictionary resource
+
+### TBD

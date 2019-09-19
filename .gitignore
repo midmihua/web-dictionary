@@ -1,6 +1,5 @@
 node_modules
 .vscode*
-local-keys.js
 temp
 dummy*
 build

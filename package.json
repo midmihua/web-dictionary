@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "online dictionary resource",
   "main": "src/app.js",
+  "engines": {
+    "node": "10.16.3"
+  },
   "scripts": {
     "test": "mocha",
     "start": "node src/app.js",

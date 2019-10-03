@@ -3,7 +3,6 @@ const path = require('path');
 const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
 const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan');
@@ -62,35 +61,5 @@ app.use((error, req, res, next) => {
 });
 
 /////////////////////////////////////////////////////////////
-// Mongodb connect
-mongoose
-    .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log(`mongodb resource connected to: ${process.env.MONGO_URI}`))
-    .catch((err) => console.log(`Error occured: ${err}`));
-
-/////////////////////////////////////////////////////////////
-// Start app
-const port = process.env.HTTP_PORT;
-const server = app.listen(port, () => console.log(`Server is running on ${port}`));
-
-/////////////////////////////////////////////////////////////
-// Shutdown
-const stopHandler = () => {
-    server && server.close(() => {
-        console.log(`Server is stopped on ${port}`)
-    });
-    mongoose && mongoose.connection.close(() => {
-        console.log(`mongodb resource is closed: ${process.env.MONGO_URI}`)
-    });
-};
-
-/////////////////////////////////////////////////////////////
-process.on('SIGTERM', stopHandler);
-process.on('SIGINT', stopHandler);
-
-/////////////////////////////////////////////////////////////
-// For testing
-module.exports = {
-    app,
-    stopHandler
-};
+// Export to use in server or in test suite
+module.exports = app;

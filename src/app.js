@@ -1,3 +1,4 @@
+require('dotenv-extended').load();
 const path = require('path');
 const fs = require('fs');
 const express = require('express');
@@ -32,9 +33,10 @@ app.use((req, res, next) => {
 app.use(helmet());
 // Middleware to compress the traffic (to have a better performance)
 app.use(compression());
-// Requests logging
+// Requests logging in case of non-test env
+const file_name = (process.env.NODE_ENV == 'test') ? 'access.local.log' : 'access.log';
 const accessLogStream = fs.createWriteStream(
-    path.join(__dirname, 'access.log'),
+    path.join(__dirname, file_name),
     { flags: 'a' }
 );
 app.use(morgan('combined', { stream: accessLogStream }));
@@ -61,16 +63,14 @@ app.use((error, req, res, next) => {
 
 /////////////////////////////////////////////////////////////
 // Mongodb connect
-const { mongoURI } = require('./config/keys');
 mongoose
-    .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('mongodb resource connected'))
+    .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log(`mongodb resource connected to: ${process.env.MONGO_URI}`))
     .catch((err) => console.log(`Error occured: ${err}`));
 
 /////////////////////////////////////////////////////////////
 // Start app
-const { httpPort } = require('./config/keys');
-const port = process.env.PORT || httpPort;
+const port = process.env.HTTP_PORT;
 const server = app.listen(port, () => console.log(`Server is running on ${port}`));
 
 /////////////////////////////////////////////////////////////
@@ -79,8 +79,18 @@ const stopHandler = () => {
     server && server.close(() => {
         console.log(`Server is stopped on ${port}`)
     });
+    mongoose && mongoose.connection.close(() => {
+        console.log(`mongodb resource is closed: ${process.env.MONGO_URI}`)
+    });
 };
 
 /////////////////////////////////////////////////////////////
 process.on('SIGTERM', stopHandler);
 process.on('SIGINT', stopHandler);
+
+/////////////////////////////////////////////////////////////
+// For testing
+module.exports = {
+    app,
+    stopHandler
+};

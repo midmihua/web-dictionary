@@ -7,7 +7,7 @@
     "node": "10.16.3"
   },
   "scripts": {
-    "test": "mocha --recursive --exit --timeout 10000",
+    "test": "NODE_ENV=test mocha --recursive --exit --timeout 10000",
     "start": "node src/server.js",
     "server": "nodemon src/server.js"
   },

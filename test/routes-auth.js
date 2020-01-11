@@ -80,7 +80,7 @@ describe('Auth routes', () => {
                 expect(type).to.equal('application/json');
                 expect(body).to.have.property('userId');
                 expect(body.userId).to.be.a('string').with.lengthOf.above(0);
-                // PUT one more time the same user
+                // PUT one more times the same user name
                 request(app)
                     .put(baseUri)
                     .send(USER_PUT_DATA)

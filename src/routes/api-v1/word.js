@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { body } = require('express-validator');
+
+const { putValidator, postValidator } = require('./validator/word-validator');
 
 const Word = require('../../models/word');
 
@@ -20,40 +21,11 @@ router.get('/:wordId', isAuth, wordController.getWord);
 
 // @route POST /apiv1/word
 // @desc  Add a new word to db
-router.post(
-    '/',
-    isAuth,
-    [
-        body('word')
-            .trim()
-            .not()
-            .isEmpty()
-            .custom((value, { req }) => {
-                return Word.findOne({ word: value.toLowerCase() })
-                    .then(wordDoc => {
-                        if (wordDoc)
-                            return Promise.reject('This word already exists.')
-                    })
-            }),
-        body('translate')
-            .trim()
-            .not()
-            .isEmpty()
-    ],
-    wordController.addWord
-);
+router.post('/', isAuth, postValidator(Word), wordController.addWord);
 
 // @route PUT /apiv1/word
 // @desc  Update an existing word
-router.put(
-    '/:wordId',
-    isAuth,
-    [
-        body('word').trim().not().isEmpty(),
-        body('translate').trim().not().isEmpty()
-    ],
-    wordController.updateWord
-);
+router.put('/:wordId', isAuth, putValidator(), wordController.updateWord);
 
 // @route DELETE /apiv1/word/wordId
 // @desc  Delete a single word by id

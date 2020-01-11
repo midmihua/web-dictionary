@@ -1,0 +1,6 @@
+{
+	"value": "ta.user@test.com",
+	"msg": "E-mail address already exists.",
+	"param": "email",
+	"location": "body"
+}

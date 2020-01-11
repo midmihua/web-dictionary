@@ -1,5 +1,4 @@
 const expect = require('chai').expect;
-const should = require('chai').should();
 const sinon = require('sinon');
 const httpMocks = require('node-mocks-http');
 const _ = require('lodash');

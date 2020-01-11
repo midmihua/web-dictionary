@@ -7,7 +7,7 @@ const jwtSecret = process.env.JWT_SECRET;
 
 const User = require('../../models/user');
 
-exports.getUsers = async (req, res, next) => {
+module.exports.getUsers = async (req, res, next) => {
     try {
         const users = await User.find();
         if (!users) {
@@ -24,7 +24,7 @@ exports.getUsers = async (req, res, next) => {
     }
 };
 
-exports.signup = async (req, res, next) => {
+module.exports.signup = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         const error = new Error('Validation failed, entered data is incorrect.');
@@ -53,7 +53,7 @@ exports.signup = async (req, res, next) => {
     }
 };
 
-exports.login = async (req, res, next) => {
+module.exports.login = async (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     let loadedUser;
@@ -79,7 +79,7 @@ exports.login = async (req, res, next) => {
                 userId: loadedUser._id.toString()
             },
             jwtSecret,
-            { expiresIn: '1h' }
+            { expiresIn: process.env.EXPIRES_IN || '1h' }
         );
         res.status(200).json({ token: token, userId: loadedUser._id.toString() });
         return;

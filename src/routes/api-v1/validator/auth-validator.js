@@ -23,7 +23,7 @@ module.exports.putValidator = (User) => {
     ];
 };
 
-module.exports.postValidator = (User) => {
+module.exports.postValidator = () => {
     return [
         body('email')
             .isEmail()

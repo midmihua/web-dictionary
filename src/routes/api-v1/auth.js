@@ -18,6 +18,6 @@ router.put('/', putValidator(User), userController.signup);
 
 // @route POST /apiv1/user
 // @desc  User login
-router.post('/', postValidator(User), userController.login);
+router.post('/', postValidator(), userController.login);
 
 module.exports = router;

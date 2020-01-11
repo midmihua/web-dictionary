@@ -4,4 +4,5 @@ temp
 dummy*
 build
 *.log
-.env
+*.env
+*.env.defaults
